@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #8FBC8B;
+  --color-black: #121212;
+  --color-white: #ffffff;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
+  
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+}
+
+:root {
+  --background: #f8f7f6;
+  --foreground: #141412;
+  --surface: #f2f0ee;
+  --surface-hover: #eceae7;
+  --glass: rgba(248, 247, 246, 0.65);
+  --glass-strong: rgba(248, 247, 246, 0.9);
+}
+
+.dark {
+  --background: #121212;
+  --foreground: #ffffff;
+  --surface: #1e1e1e;
+  --surface-hover: #27272a;
+  --glass: rgba(18, 18, 18, 0.6);
+  --glass-strong: rgba(18, 18, 18, 0.85);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px; /* offset for fixed navbar */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   LIQUID GLASS — iOS 26 / visionOS Style
+   ============================================ */
+
+/* Base glass — subtle cards, nav */
+.glass {
+  position: relative;
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Specular top-edge highlight */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.0) 40%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Strong glass — modals, contact cards, booking form */
+.glass-strong {
+  position: relative;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.8);
+}
+
+.glass-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.0) 45%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Liquid glass — the hero feature element (Experience cards, etc.) */
+.liquid-glass {
+  position: relative;
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.1);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.1);
+  background: rgba(255, 255, 255, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* Prismatic inner shimmer */
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(143, 188, 139, 0.06) 30%,
+    rgba(120, 160, 220, 0.04) 60%,
+    rgba(255, 255, 255, 0.0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* === DARK MODE === */
+.dark .glass {
+  background: rgba(20, 20, 25, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dark .glass::before {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.0) 40%
+  );
+}
+
+.dark .glass-strong {
+  background: rgba(18, 18, 22, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-strong::before {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.0) 45%
+  );
+}
+
+.dark .liquid-glass {
+  background: rgba(22, 22, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dark .liquid-glass::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(143, 188, 139, 0.04) 30%,
+    rgba(120, 160, 220, 0.03) 60%,
+    rgba(255, 255, 255, 0.0) 100%
+  );
+}
+
+
+/* ============================================
+   NAVBAR GLASS — Adapts to Light/Dark Mode
+   ============================================ */
+.navbar-glass {
+  position: relative;
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.05),
+    0 1px 6px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.navbar-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(143, 188, 139, 0.05) 40%,
+    rgba(255, 255, 255, 0.0) 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Dark Mode Navbar */
+.dark .navbar-glass {
+  background: rgba(10, 10, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 4px 30px rgba(0, 0, 0, 0.35),
+    0 1px 6px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.dark .navbar-glass::before {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(143, 188, 139, 0.04) 40%,
+    rgba(255, 255, 255, 0.0) 70%
+  );
+}
