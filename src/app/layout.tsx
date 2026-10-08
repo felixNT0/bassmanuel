@@ -108,9 +108,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
+
   manifest: "/manifest.json",
 };
 
@@ -184,6 +182,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          nonce=""
         />
       </body>
     </html>
