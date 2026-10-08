@@ -33,7 +33,7 @@ const photos = [
     location: "Minna",
   },
   {
-    src: "/bassmauel with bass.jpeg",
+    src: "/bassmanuel with bass.jpeg",
     alt: "BASSMANUEL with Bass",
     location: "Performance",
   },
