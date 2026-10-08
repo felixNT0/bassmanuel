@@ -31,7 +31,7 @@ pnpm audit --fix
 pnpm audit --prod
 ```
 
-**Note on Dev Dependency Vulnerabilities**: The `braces` package (v3.0.3) has a known high-severity vulnerability (GHSA-vfj7-8cjw-p6xm) but is only used in development via ESLint. This does not affect production builds. The version is pinned via pnpm overrides in package.json to ensure consistency when a patched version becomes available.
+**Note on Dev Dependency Vulnerabilities**: The `braces` package (v3.0.3) has a known high-severity vulnerability (GHSA-vfj7-8cjw-p6xm) but is only used in development via ESLint. This does not affect production builds. The version is pinned via .npmrc overrides to ensure consistency when a patched version becomes available.
 
 ### 2. Build Verification
 
