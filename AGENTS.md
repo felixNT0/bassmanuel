@@ -14,6 +14,8 @@ The site uses comprehensive security headers configured in `next.config.ts`:
 - **Permissions-Policy**: Restricts access to browser features
 - **X-XSS-Protection**: Activates browser XSS filters
 
+**CSP Exceptions**: The CSP allows connections to `*.formsubmit.co` for the contact form functionality. This is a necessary exception for form submissions and is limited to the formsubmit.co domain only.
+
 ## Security Verification Steps
 
 ### 1. Dependency Security Audits
@@ -109,6 +111,13 @@ curl -I https://bassmanuel.com
 - Only trusted domains (YouTube) are allowed for remote images
 - SVG files are not allowed to prevent XSS via SVG
 - Image optimization is enabled
+
+### Form Security
+
+- Contact form uses FormSubmit.co for email delivery
+- CSP allows connections to `*.formsubmit.co` domain
+- Form submissions are validated on the server
+- No sensitive data is stored locally
 
 ### Third-Party Integrations
 
