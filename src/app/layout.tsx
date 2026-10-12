@@ -17,7 +17,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bassmanuel.com"),
+  metadataBase: new URL("https://bassmanuel.vercel.app"),
   title: {
     default:
       "BASSMANUEL | Professional Gospel Bass Guitarist Nigeria | The Groove Master",
