@@ -12,19 +12,19 @@ import { VideoGallery } from "@/components/VideoGallery";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Professional Gospel Bass Guitarist Nigeria | BASSMANUEL",
   description:
-    "Welcome to BASSMANUEL - The Groove Master. Professional Gospel Bass Guitarist from Nigeria with 16 years of experience in worship and praise leadership.",
+    "Meet Arise Emmanuel (BASSMANUEL) - Professional Gospel Bass Guitarist from Minna, Nigeria with 16+ years of experience. Book for church services, concerts, studio sessions, and music direction. Expert in worship leadership and praise music.",
   openGraph: {
-    title: "BASSMANUEL | The Groove Master | Gospel Bass Guitarist",
+    title: "BASSMANUEL | Professional Gospel Bass Guitarist Nigeria",
     description:
-      "Professional Gospel Bass Guitarist from Minna, Nigeria. 16 years of musical excellence, groove, pocket, power and praise.",
+      "Book Arise Emmanuel - Professional Gospel Bass Guitarist with 16+ years of experience. Available for church services, concerts, studio sessions, and music direction across Nigeria.",
     images: [
       {
         url: "/bassmanuel.jpeg",
         width: 1200,
         height: 630,
-        alt: "BASSMANUEL - Arise Emmanuel performing on bass guitar",
+        alt: "BASSMANUEL - Arise Emmanuel performing on bass guitar at a worship service",
       },
     ],
   },
