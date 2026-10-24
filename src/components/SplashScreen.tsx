@@ -3,100 +3,64 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-function playBassGroove() {
-  try {
-    const ctx = new AudioContext();
-    ctx.resume();
-
-    // Gospel funk bass riff — E groove
-    // E1→E2→G#2→A2→B2→A2→G#2→E2→D2→E2
-    const notes = [
-      { freq: 41.2, start: 0.0, dur: 0.12 },
-      { freq: 82.4, start: 0.14, dur: 0.1 },
-      { freq: 103.8, start: 0.26, dur: 0.1 },
-      { freq: 110.0, start: 0.38, dur: 0.14 },
-      { freq: 123.5, start: 0.54, dur: 0.1 },
-      { freq: 110.0, start: 0.66, dur: 0.08 },
-      { freq: 103.8, start: 0.76, dur: 0.1 },
-      { freq: 82.4, start: 0.88, dur: 0.08 },
-      { freq: 73.4, start: 0.98, dur: 0.14 },
-      { freq: 82.4, start: 1.14, dur: 0.3 },
-    ];
-
-    const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(0.75, ctx.currentTime);
-    masterGain.connect(ctx.destination);
-
-    notes.forEach(({ freq, start, dur }) => {
-      const now = ctx.currentTime;
-
-      // Sine — deep fundamental punch
-      const sine = ctx.createOscillator();
-      const sineGain = ctx.createGain();
-      sine.type = "sine";
-      sine.frequency.setValueAtTime(freq, now + start);
-      sineGain.gain.setValueAtTime(0, now + start);
-      sineGain.gain.linearRampToValueAtTime(0.55, now + start + 0.015);
-      sineGain.gain.exponentialRampToValueAtTime(0.001, now + start + dur);
-      sine.connect(sineGain);
-      sineGain.connect(masterGain);
-      sine.start(now + start);
-      sine.stop(now + start + dur + 0.02);
-
-      // Sawtooth — harmonic growl through low-pass filter
-      const saw = ctx.createOscillator();
-      const sawGain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-      saw.type = "sawtooth";
-      saw.frequency.setValueAtTime(freq, now + start);
-      saw.frequency.linearRampToValueAtTime(freq * 1.012, now + start + 0.03);
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(600, now + start);
-      filter.frequency.exponentialRampToValueAtTime(200, now + start + dur);
-      filter.Q.value = 2;
-      sawGain.gain.setValueAtTime(0, now + start);
-      sawGain.gain.linearRampToValueAtTime(0.28, now + start + 0.02);
-      sawGain.gain.exponentialRampToValueAtTime(0.001, now + start + dur * 0.8);
-      saw.connect(filter);
-      filter.connect(sawGain);
-      sawGain.connect(masterGain);
-      saw.start(now + start);
-      saw.stop(now + start + dur + 0.02);
-    });
-  } catch (e) {
-    console.log("Web Audio error:", e);
-  }
-}
+import { useEffect, useRef, useState } from "react";
 
 export function SplashScreen() {
   const [showSplash, setShowSplash] = useState(true);
-  const [logoReady, setLogoReady] = useState(false);
   const { resolvedTheme } = useTheme();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
-    // Logo finishes entering at ~1.2s — then show the "enter" prompt
-    const logoTimer = setTimeout(() => setLogoReady(true), 1400);
+    // Create audio element
+    audioRef.current = new Audio(
+      "/chrysalyn-cinematic-intro-whoosh-with-deep-bass-drop.mp3",
+    );
+    audioRef.current.volume = 0.7;
 
-    return () => {
-      clearTimeout(logoTimer);
-      document.body.style.overflow = "unset";
+    // Try to play audio automatically
+    const playAudio = () => {
+      if (audioRef.current) {
+        audioRef.current.play().catch((error) => {
+          console.log("Autoplay prevented by browser:", error);
+          // If autoplay is blocked, we'll just show the splash without audio
+        });
+      }
     };
-  }, []);
 
-  function handleEnter() {
-    // User gesture → audio is guaranteed to play
-    playBassGroove();
+    // Attempt to play audio immediately
+    playAudio();
 
-    // Close splash after groove starts (give ~300ms for the first note)
-    setTimeout(() => {
+    // Also try on first user interaction as fallback
+    const handleUserInteraction = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(() => {});
+        document.removeEventListener("click", handleUserInteraction);
+        document.removeEventListener("touchstart", handleUserInteraction);
+      }
+    };
+
+    document.addEventListener("click", handleUserInteraction);
+    document.addEventListener("touchstart", handleUserInteraction);
+
+    // Auto-dismiss splash screen after audio ends or after 3 seconds
+    const dismissTimer = setTimeout(() => {
       setShowSplash(false);
       document.body.style.overflow = "unset";
-    }, 300);
-  }
+    }, 3000);
+
+    return () => {
+      clearTimeout(dismissTimer);
+      document.removeEventListener("click", handleUserInteraction);
+      document.removeEventListener("touchstart", handleUserInteraction);
+      document.body.style.overflow = "unset";
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   const logoSrc =
     resolvedTheme === "light"
@@ -149,39 +113,6 @@ export function SplashScreen() {
             }}
             className="absolute w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-brand/30 pointer-events-none"
           />
-
-          {/* Enter CTA — appears after logo finishes animating in */}
-          <AnimatePresence>
-            {logoReady && (
-              <motion.button
-                key="enter-btn"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.6, ease: "easeOut" },
-                }}
-                exit={{ opacity: 0 }}
-                onClick={handleEnter}
-                className="mt-12 sm:mt-16 flex flex-col items-center gap-2 group cursor-pointer"
-                aria-label="Enter the site"
-              >
-                <span className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-foreground/50 group-hover:text-brand transition-colors duration-300">
-                  tap to enter
-                </span>
-                {/* Animated chevron */}
-                <motion.div
-                  animate={{ y: [0, 6, 0] }}
-                  transition={{
-                    duration: 1.4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="w-px h-8 sm:h-10 bg-linear-to-b from-brand/60 to-transparent"
-                />
-              </motion.button>
-            )}
-          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
