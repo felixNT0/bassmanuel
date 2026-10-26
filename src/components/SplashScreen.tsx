@@ -9,7 +9,6 @@ export function SplashScreen() {
   const [showSplash, setShowSplash] = useState(true);
   const { resolvedTheme } = useTheme();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const dismissTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
 
   useEffect(() => {
@@ -23,9 +22,6 @@ export function SplashScreen() {
 
     return () => {
       document.body.style.overflow = "unset";
-      if (dismissTimerRef.current) {
-        clearTimeout(dismissTimerRef.current);
-      }
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -41,11 +37,9 @@ export function SplashScreen() {
     }
     setHasEntered(true);
 
-    // Dismiss splash screen after audio ends or after 3 seconds
-    dismissTimerRef.current = setTimeout(() => {
-      setShowSplash(false);
-      document.body.style.overflow = "unset";
-    }, 3000);
+    // Dismiss splash screen immediately
+    setShowSplash(false);
+    document.body.style.overflow = "unset";
   };
 
   const logoSrc =
@@ -107,7 +101,7 @@ export function SplashScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.5 }}
               onClick={handleEnter}
-              className="mt-16 px-8 py-3 bg-brand text-background font-semibold rounded-full hover:bg-brand/90 transition-colors cursor-pointer"
+              className="mt-16 text-foreground hover:text-brand transition-colors cursor-pointer text-sm tracking-widest uppercase"
             >
               Tap to Enter
             </motion.button>
